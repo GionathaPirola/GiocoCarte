@@ -1,0 +1,16 @@
+Model Gioco
+
+Parameters:
+  pescataG1: [1 .. 9]
+  pescataG2: [1 .. 9]
+  pescataG3: [1 .. 9]
+  vincitore: {-1 1 2 3}
+
+Constraints:
+  # (vincitore == 1) => (((pescataG1 == 8) AND (pescataG2 != 8) AND (pescataG3 != 8)) OR  ((pescataG1 <= 8) AND (pescataG2 > 8) AND (pescataG3 > 8))) #
+  
+  # (vincitore == 2) => (((pescataG2 == 8) AND (pescataG3 != 8)) OR ((pescataG2 <= 8) AND (pescataG1 > 8) AND (pescataG3 > 8))) #
+  
+  # (vincitore == 3) => ((pescataG3 == 8) OR ((pescataG3 <= 8) AND (pescataG1 > 8) AND (pescataG2 > 8))) #
+  
+  # (vincitore == -1) => ((pescataG1 != 8) AND (pescataG2 != 8) AND (pescataG3 != 8)) #

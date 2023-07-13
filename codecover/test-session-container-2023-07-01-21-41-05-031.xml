@@ -1,0 +1,628 @@
+<?xml version="1.0" encoding="UTF-8"?><TestSessionContainer xmlns="http://www.codecover.org/xml/testsession-container" Date="1688240465028" TestSessionContainerId="194bb0e5-572f-4dfc-ab53-764e6c339021" version="1.0">
+<SrcFileList>
+<SrcFile Content="public class Gioco {&#13;&#10;&#9;/*@spec_public@*/ int[] mano;&#13;&#10;&#9;private /*@spec_public@*/ int[] vincitori;&#13;&#10;&#9;private /*@spec_public@*/ int vittoria;&#13;&#10;&#9;private /*@spec_public@*/ int controllo;&#13;&#10;&#9;&#13;&#10;&#9;//@public invariant  mano!=null;&#13;&#10;&#9;//@public invariant vincitori!=null;&#13;&#10;&#9;//@public invariant (\forall int x; 0&lt;=x &amp;&amp;  x&lt;vincitori.length; vincitori[x]&gt;=-1 &amp;&amp; vincitori[x]&lt;=1);&#13;&#10;&#9;&#13;&#10;&#9;&#13;&#10;&#9;//In input voglio almeno un giocatore&#13;&#10;&#9;&#9;//@requires giocatori &gt; 0 &amp;&amp; giocatori &lt; 1000;&#13;&#10;&#9;&#13;&#10;&#9;//Inserisco anche qua le stesse condizioni dell'invariante in quanto l'invariante funziona dopo il costruttore&#13;&#10;&#9;&#9;//@ensures mano!= null;&#13;&#10;&#9;&#9;//@ensures vincitori!=null;&#13;&#10;&#9;&#13;&#10;&#9;//Controllo che vittoria venga impostata a -1;&#13;&#10;&#9;&#9;//@ensures vittoria == -1;&#13;&#10;&#9;&#13;&#10;&#9;//Controllo che i vettori mano e vincitori siano della lunghezza corretta&#13;&#10;&#9;&#9;//@ensures (mano.length == giocatori) &amp;&amp; (vincitori.length == giocatori);&#13;&#10;&#9;//Controllo che i vettori mano e vincitori siano inizializzati a zero&#13;&#10;&#9;&#9;//@ensures (\forall int x; 0&lt;=x &amp;&amp;  x&lt;giocatori; mano[x]==0 &amp;&amp; vincitori[x]==0);&#13;&#10;&#9;public Gioco(int giocatori) {&#13;&#10;&#9;&#9;//All'inizio nessuno ha vinto&#13;&#10;&#9;&#9;this.vittoria = -1;&#13;&#10;&#9;&#9;this.mano = new int[giocatori];&#13;&#10;&#9;&#9;this.vincitori = new int[giocatori];&#13;&#10;&#9;&#9;//@loop_invariant (\forall int x; 0&lt;=x &amp;&amp;  x&lt;i; mano[x]==0 &amp;&amp; vincitori[x]==0);&#13;&#10;&#9;&#9;//@loop_invariant i &gt;= 0;&#13;&#10;&#9;&#9;for(int i = 0; i &lt; giocatori; i++) {&#13;&#10;&#9;&#9;&#9;this.mano[i] = 0;&#13;&#10;&#9;&#9;&#9;this.vincitori[i] = 0;&#13;&#10;&#9;&#9;}&#13;&#10;&#9;}&#13;&#10;&#9;&#13;&#10;&#9;&#13;&#10;&#9;&#13;&#10;&#9;//@diverges true;&#13;&#10;&#9;&#13;&#10;&#9;//Richieso che il vettore delle pescate non sia nullo&#13;&#10;&#9;&#9;//@requires pescate != null;&#13;&#10;&#9;&#13;&#10;&#9;//Richiedo che il vettore delle pescate abbia numeri positivi, compresi tra uno e sette&#13;&#10;&#9;&#9;//@requires (\forall int x; 0&lt;=x &amp;&amp;  x&lt;pescate.length; pescate[x]&gt;0 &amp;&amp; pescate[x]&lt;8);&#13;&#10;&#9;&#13;&#10;&#9;//Controllo che la mano più la pescate non superi il numero 20&#13;&#10;&#9;&#9;//@requires (\forall int x; 0&lt;=x &amp;&amp;  x&lt;mano.length; (mano[x]+pescate[x])&gt;=0 &amp;&amp; (mano[x]+pescate[x])&lt;=20);&#13;&#10;&#9;&#13;&#10;&#9;//Controllo che vittoria sia un numero compreso tra -1 (nessuno ha ancora vinto) e il numero dei giocatori&#13;&#10;&#9;&#9;//@ensures (vittoria &gt;=-1) &amp;&amp; (vittoria&lt;=mano.length);&#13;&#10;&#9;&#13;&#10;&#9;//Controllo che in mano non abbia piu di 14&#13;&#10;&#9;&#9;//@ensures (\forall int x; 0&lt;=x &amp;&amp;  x&lt;mano.length; mano[x]&gt;=0 &amp;&amp; mano[x]&lt;=14);&#13;&#10;&#9;&#13;&#10;&#9;//Controllo che il risultato sia compreso tra -1 ed il numero di giocatori&#13;&#10;&#9;&#9;//@ensures (\result &gt;=-1) &amp;&amp; (\result&lt;=mano.length);&#13;&#10;&#9;public int giocata(int[] pescate) {&#13;&#10;&#9;&#9;if(vittoria == -1) {&#13;&#10;&#9;&#9;&#9;//@loop_invariant i&gt;=0 &amp;&amp; i&lt;=mano.length;&#13;&#10;&#9;&#9;&#9;//@loop_invariant (\forall int x; 0&lt;=x &amp;&amp;  x&lt;=i; mano[x]&gt;=0 &amp;&amp; mano[x]&lt;=20);&#13;&#10;&#9;&#9;&#9;for(int i = 0; i &lt; mano.length; i++) {&#13;&#10;&#9;&#9;&#9;&#9;//Se non si ha ancora perso ne vinto allora si può pescare&#13;&#10;&#9;&#9;&#9;&#9;if(vincitori[i] == 0)&#13;&#10;&#9;&#9;&#9;&#9;&#9;mano[i] = mano[i] + pescate[i];&#13;&#10;&#9;&#9;&#9;}&#13;&#10;&#9;&#9;&#9;primoControllo();&#13;&#10;&#9;&#9;&#9;//@assert (vittoria &gt;=-1) &amp;&amp; (vittoria&lt;=mano.length);&#13;&#10;&#9;&#9;&#9;secondoControllo();&#13;&#10;&#9;&#9;&#9;//@assert (vittoria &gt;=-1) &amp;&amp; (vittoria&lt;=mano.length);&#13;&#10;&#9;&#9;}&#13;&#10;&#9;&#9;return vittoria;&#13;&#10;&#9;}&#13;&#10;&#9;&#13;&#10;&#9;&#13;&#10;&#9;//@diverges true;&#13;&#10;&#9;&#13;&#10;&#9;//Tutti devono avere o vinto o perso o possono continuare a giocare&#13;&#10;&#9;&#9;//@ensures (\forall int x; 0&lt;=x &amp;&amp; x&lt;mano.length; (vincitori[x]==-1) || (vincitori[x]==0) || (vincitori[x]==1));&#13;&#10;&#9;public void primoControllo() {&#13;&#10;&#9;&#9;this.controllo = 0;&#13;&#10;&#9;&#9;//Chi ha in mano più di otto ha perso&#13;&#10;&#9;&#9;&#9;//@loop_invariant (\forall int x; 0&lt;=x &amp;&amp; x&lt;=i; (mano[x]&gt;8) ==&gt; (vincitori[x]==-1));&#13;&#10;&#9;&#9;//Chi ha in mano esattamente otto ha vinto&#13;&#10;&#9;&#9;&#9;//@loop_invariant (\forall int x; 0&lt;=x &amp;&amp; x&lt;=i; (mano[x]==8) ==&gt; (vincitori[x]==1));&#13;&#10;&#9;&#9;for(int i = 0; i &lt; mano.length; i++) {&#13;&#10;&#9;&#9;&#9;//Se in mano si ha più di otto si perde&#13;&#10;&#9;&#9;&#9;if(mano[i] &gt; 8)&#13;&#10;&#9;&#9;&#9;&#9;vincitori[i] = - 1;&#13;&#10;&#9;&#9;&#9;//Se in mano si ha esattamente otto, si vince&#13;&#10;&#9;&#9;&#9;if(mano[i] == 8) {&#13;&#10;&#9;&#9;&#9;&#9;vincitori[i] = 1;&#13;&#10;&#9;&#9;&#9;&#9;vittoria = i + 1;&#13;&#10;&#9;&#9;&#9;}&#13;&#10;&#9;&#9;&#9;//Se in mano si ha meno di otto, si può continuare a giocare a patto che nessuno abbia fatto esattamente otto (Controllato nel secondo metodo)&#13;&#10;&#9;&#9;&#9;if(mano[i] &lt; 8)&#13;&#10;&#9;&#9;&#9;&#9;controllo = controllo + 1; &#13;&#10;&#9;&#9;}&#13;&#10;&#9;}&#13;&#10;&#9;&#13;&#10;&#13;&#10;&#9;//Tutti devono avere o vinto o perso o possono continuare a giocare&#13;&#10;&#9;&#9;//@ensures (\forall int x; 0&lt;=x &amp;&amp; x&lt;mano.length; (vincitori[x]==-1) || (vincitori[x]==0) || (vincitori[x]==1));&#13;&#10;&#9;public void secondoControllo() {&#13;&#10;&#9;&#9;for(int i = 0; i &lt; mano.length; i++) {&#13;&#10;&#9;&#9;&#9;//Se in mano si ha meno di 8, però qualcuno ha già vinto allora si ha perso&#13;&#10;&#9;&#9;&#9;if(mano[i] &lt; 8 &amp;&amp; vittoria!=-1)&#13;&#10;&#9;&#9;&#9;&#9;vincitori[i] = -1;&#13;&#10;&#9;&#9;&#9;//Se in mano si ha mano di otto, però tutti gli altri hanno tutti superato l'otto, allora si ha vinto&#13;&#10;&#9;&#9;&#9;else if(mano[i] &lt; 8 &amp;&amp; controllo == 1) {&#13;&#10;&#9;&#9;&#9;&#9;vincitori[i] = 1;&#13;&#10;&#9;&#9;&#9;&#9;vittoria = i + 1;&#13;&#10;&#9;&#9;&#9;}&#13;&#10;&#9;&#9;}&#13;&#10;&#9;}&#13;&#10;&#9;&#13;&#10;&#9;&#13;&#10;&#9;//Il metodo print viene escluso da jml per problemi di efficenza da parte del solver z3_4_3&#13;&#10;&#9;public void print() {&#13;&#10;&#9;&#9;for(int i = 0; i &lt; mano.length; i++) {&#13;&#10;&#9;&#9;&#9;if(vincitori[i] == 1)&#13;&#10;&#9;&#9;&#9;&#9;System.out.println(&quot;Giocatore &quot; + i + &quot; ha in mano: &quot; + mano[i] + &quot;-&gt; WIN!&quot;);&#13;&#10;&#9;&#9;&#9;else if(vincitori[i] == 0)&#13;&#10;&#9;&#9;&#9;&#9;System.out.println(&quot;Giocatore &quot; + i + &quot; ha in mano: &quot; + mano[i] + &quot;-&gt; PUO GIOCARE&quot;);&#13;&#10;&#9;&#9;&#9;else&#13;&#10;&#9;&#9;&#9;&#9;System.out.println(&quot;Giocatore &quot; + i + &quot; ha in mano: &quot; + mano[i] + &quot;-&gt; LOSE!&quot;);&#13;&#10;&#9;&#9;}&#13;&#10;&#9;&#9;System.out.println(&quot;\n&quot;);&#13;&#10;&#9;}&#13;&#10;}&#13;&#10;" Filename="Gioco.java" Intrnl_Id="1"/>
+</SrcFileList>
+<CritList>
+<CritListEntry Name="org.codecover.model.utils.criteria.ConditionCoverage" PluginName="org.codecover"/>
+<CritListEntry Name="org.codecover.model.utils.criteria.BranchCoverage" PluginName="org.codecover"/>
+<CritListEntry Name="org.codecover.model.utils.criteria.StatementCoverage" PluginName="org.codecover"/>
+</CritList>
+<BoolOpList>
+<BoolOp Arity="2" Intrnl_Id="2" Name="conditional and (&amp;&amp;)">
+<BoolAssgnmntBoolMapList>
+<MapEntry BoolAssgnmnt="02" Value="false"/>
+<MapEntry BoolAssgnmnt="10" Value="false"/>
+<MapEntry BoolAssgnmnt="11" Value="true"/>
+</BoolAssgnmntBoolMapList>
+</BoolOp>
+</BoolOpList>
+<HierarchyLvlTypeList>
+<HierarchyLvlType EnglishName="method" IntrnlName="method" Intrnl_Id="3"/>
+<HierarchyLvlType EnglishName="class" IntrnlName="class" Intrnl_Id="4"/>
+<HierarchyLvlType EnglishName="default package" IntrnlName="default package" Intrnl_Id="5"/>
+</HierarchyLvlTypeList>
+<MASTRoot>
+<HierarchyLvl HierarchyLvlId="154" HierarchyLvlTypeId="5" Intrnl_Id="6" Name="default package">
+<Header/>
+<LocList/>
+<HierarchyLvl HierarchyLvlId="153" HierarchyLvlTypeId="4" Intrnl_Id="7" Name="Gioco">
+<Header>
+<Loc EndOffset="18" SrcFileId="1" StartOffset="0"/>
+</Header>
+<LocList>
+<Loc EndOffset="5026" SrcFileId="1" StartOffset="0"/>
+</LocList>
+<HierarchyLvl HierarchyLvlId="148" HierarchyLvlTypeId="3" Intrnl_Id="8" Name="Gioco">
+<Header>
+<Loc EndOffset="1058" SrcFileId="1" StartOffset="1031"/>
+</Header>
+<LocList>
+<Loc EndOffset="1401" SrcFileId="1" StartOffset="1031"/>
+</LocList>
+<StmntSeq Intrnl_Id="9">
+<LocList>
+<Loc EndOffset="1116" SrcFileId="1" StartOffset="1097"/>
+<Loc EndOffset="1151" SrcFileId="1" StartOffset="1120"/>
+<Loc EndOffset="1191" SrcFileId="1" StartOffset="1155"/>
+<Loc EndOffset="1397" SrcFileId="1" StartOffset="1307"/>
+</LocList>
+<BasicStmnt CovItemId="S1" CovItemPrefix="Gioco.java" Intrnl_Id="10">
+<LocList>
+<Loc EndOffset="1116" SrcFileId="1" StartOffset="1097"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S2" CovItemPrefix="Gioco.java" Intrnl_Id="11">
+<LocList>
+<Loc EndOffset="1151" SrcFileId="1" StartOffset="1120"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S3" CovItemPrefix="Gioco.java" Intrnl_Id="12">
+<LocList>
+<Loc EndOffset="1191" SrcFileId="1" StartOffset="1155"/>
+</LocList>
+</BasicStmnt>
+<LoopStmnt CovItemId="S4" CovItemPrefix="Gioco.java" Intrnl_Id="13" MltplExecId="L1-2" MltplExecPrefix="Gioco.java" NvrExecId="L1-0" NvrExecPrefix="Gioco.java" OnceExecutedId="L1-1" OnceExecutedPrefix="Gioco.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="14">
+<LocList>
+<Loc EndOffset="1365" SrcFileId="1" StartOffset="1348"/>
+<Loc EndOffset="1392" SrcFileId="1" StartOffset="1370"/>
+</LocList>
+<BasicStmnt CovItemId="S5" CovItemPrefix="Gioco.java" Intrnl_Id="15">
+<LocList>
+<Loc EndOffset="1365" SrcFileId="1" StartOffset="1348"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S6" CovItemPrefix="Gioco.java" Intrnl_Id="16">
+<LocList>
+<Loc EndOffset="1392" SrcFileId="1" StartOffset="1370"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<Keyword EndOffset="1310" SrcFileId="1" StartOffset="1307"/>
+<LocList>
+<Loc EndOffset="1397" SrcFileId="1" StartOffset="1307"/>
+</LocList>
+<RootTerm CovItemId="C1" CovItemPrefix="Gioco.java" Intrnl_Id="17">
+<BasicBoolTerm Intrnl_Id="18">
+<LocList>
+<Loc EndOffset="1335" SrcFileId="1" StartOffset="1322"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</LoopStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="149" HierarchyLvlTypeId="3" Intrnl_Id="19" Name="giocata">
+<Header>
+<Loc EndOffset="2353" SrcFileId="1" StartOffset="2320"/>
+</Header>
+<LocList>
+<Loc EndOffset="2875" SrcFileId="1" StartOffset="2320"/>
+</LocList>
+<StmntSeq Intrnl_Id="20">
+<LocList>
+<Loc EndOffset="2851" SrcFileId="1" StartOffset="2359"/>
+<Loc EndOffset="2871" SrcFileId="1" StartOffset="2855"/>
+</LocList>
+<CondStmnt CovItemId="S7" CovItemPrefix="Gioco.java" Intrnl_Id="21">
+<Branch CovItemId="B1" CovItemPrefix="Gioco.java" Implct="false" Intrnl_Id="22">
+<Cond/>
+<LocList>
+<Loc EndOffset="2851" SrcFileId="1" StartOffset="2378"/>
+</LocList>
+<StmntSeq Intrnl_Id="23">
+<LocList>
+<Loc EndOffset="2684" SrcFileId="1" StartOffset="2511"/>
+<Loc EndOffset="2706" SrcFileId="1" StartOffset="2689"/>
+<Loc EndOffset="2788" SrcFileId="1" StartOffset="2769"/>
+</LocList>
+<LoopStmnt CovItemId="S8" CovItemPrefix="Gioco.java" Intrnl_Id="24" MltplExecId="L2-2" MltplExecPrefix="Gioco.java" NvrExecId="L2-0" NvrExecPrefix="Gioco.java" OnceExecutedId="L2-1" OnceExecutedPrefix="Gioco.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="25">
+<LocList>
+<Loc EndOffset="2678" SrcFileId="1" StartOffset="2619"/>
+</LocList>
+<CondStmnt CovItemId="S9" CovItemPrefix="Gioco.java" Intrnl_Id="26">
+<Branch CovItemId="B3" CovItemPrefix="Gioco.java" Implct="false" Intrnl_Id="27">
+<Cond/>
+<LocList>
+<Loc EndOffset="2678" SrcFileId="1" StartOffset="2647"/>
+</LocList>
+<StmntSeq Intrnl_Id="28">
+<LocList>
+<Loc EndOffset="2678" SrcFileId="1" StartOffset="2647"/>
+</LocList>
+<BasicStmnt CovItemId="S10" CovItemPrefix="Gioco.java" Intrnl_Id="29">
+<LocList>
+<Loc EndOffset="2678" SrcFileId="1" StartOffset="2647"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B4" CovItemPrefix="Gioco.java" Implct="true" Intrnl_Id="30">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="31">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="2621" SrcFileId="1" StartOffset="2619"/>
+<LocList>
+<Loc EndOffset="2678" SrcFileId="1" StartOffset="2619"/>
+</LocList>
+<RootTerm CovItemId="C4" CovItemPrefix="Gioco.java" Intrnl_Id="32">
+<BasicBoolTerm Intrnl_Id="33">
+<LocList>
+<Loc EndOffset="2639" SrcFileId="1" StartOffset="2622"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+</StmntSeq>
+<Keyword EndOffset="2514" SrcFileId="1" StartOffset="2511"/>
+<LocList>
+<Loc EndOffset="2684" SrcFileId="1" StartOffset="2511"/>
+</LocList>
+<RootTerm CovItemId="C3" CovItemPrefix="Gioco.java" Intrnl_Id="34">
+<BasicBoolTerm Intrnl_Id="35">
+<LocList>
+<Loc EndOffset="2541" SrcFileId="1" StartOffset="2526"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</LoopStmnt>
+<BasicStmnt CovItemId="S11" CovItemPrefix="Gioco.java" Intrnl_Id="36">
+<LocList>
+<Loc EndOffset="2706" SrcFileId="1" StartOffset="2689"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S12" CovItemPrefix="Gioco.java" Intrnl_Id="37">
+<LocList>
+<Loc EndOffset="2788" SrcFileId="1" StartOffset="2769"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B2" CovItemPrefix="Gioco.java" Implct="true" Intrnl_Id="38">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="39">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="2361" SrcFileId="1" StartOffset="2359"/>
+<LocList>
+<Loc EndOffset="2851" SrcFileId="1" StartOffset="2359"/>
+</LocList>
+<RootTerm CovItemId="C2" CovItemPrefix="Gioco.java" Intrnl_Id="40">
+<BasicBoolTerm Intrnl_Id="41">
+<LocList>
+<Loc EndOffset="2376" SrcFileId="1" StartOffset="2362"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<BasicStmnt CovItemId="S13" CovItemPrefix="Gioco.java" Intrnl_Id="42">
+<LocList>
+<Loc EndOffset="2871" SrcFileId="1" StartOffset="2855"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="150" HierarchyLvlTypeId="3" Intrnl_Id="43" Name="primoControllo">
+<Header>
+<Loc EndOffset="3121" SrcFileId="1" StartOffset="3093"/>
+</Header>
+<LocList>
+<Loc EndOffset="3876" SrcFileId="1" StartOffset="3093"/>
+</LocList>
+<StmntSeq Intrnl_Id="44">
+<LocList>
+<Loc EndOffset="3146" SrcFileId="1" StartOffset="3127"/>
+<Loc EndOffset="3872" SrcFileId="1" StartOffset="3415"/>
+</LocList>
+<BasicStmnt CovItemId="S14" CovItemPrefix="Gioco.java" Intrnl_Id="45">
+<LocList>
+<Loc EndOffset="3146" SrcFileId="1" StartOffset="3127"/>
+</LocList>
+</BasicStmnt>
+<LoopStmnt CovItemId="S15" CovItemPrefix="Gioco.java" Intrnl_Id="46" MltplExecId="L3-2" MltplExecPrefix="Gioco.java" NvrExecId="L3-0" NvrExecPrefix="Gioco.java" OnceExecutedId="L3-1" OnceExecutedPrefix="Gioco.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="47">
+<LocList>
+<Loc EndOffset="3542" SrcFileId="1" StartOffset="3502"/>
+<Loc EndOffset="3667" SrcFileId="1" StartOffset="3597"/>
+<Loc EndOffset="3866" SrcFileId="1" StartOffset="3819"/>
+</LocList>
+<CondStmnt CovItemId="S16" CovItemPrefix="Gioco.java" Intrnl_Id="48">
+<Branch CovItemId="B5" CovItemPrefix="Gioco.java" Implct="false" Intrnl_Id="49">
+<Cond/>
+<LocList>
+<Loc EndOffset="3542" SrcFileId="1" StartOffset="3523"/>
+</LocList>
+<StmntSeq Intrnl_Id="50">
+<LocList>
+<Loc EndOffset="3542" SrcFileId="1" StartOffset="3523"/>
+</LocList>
+<BasicStmnt CovItemId="S17" CovItemPrefix="Gioco.java" Intrnl_Id="51">
+<LocList>
+<Loc EndOffset="3542" SrcFileId="1" StartOffset="3523"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B6" CovItemPrefix="Gioco.java" Implct="true" Intrnl_Id="52">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="53">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="3504" SrcFileId="1" StartOffset="3502"/>
+<LocList>
+<Loc EndOffset="3542" SrcFileId="1" StartOffset="3502"/>
+</LocList>
+<RootTerm CovItemId="C6" CovItemPrefix="Gioco.java" Intrnl_Id="54">
+<BasicBoolTerm Intrnl_Id="55">
+<LocList>
+<Loc EndOffset="3516" SrcFileId="1" StartOffset="3505"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<CondStmnt CovItemId="S18" CovItemPrefix="Gioco.java" Intrnl_Id="56">
+<Branch CovItemId="B7" CovItemPrefix="Gioco.java" Implct="false" Intrnl_Id="57">
+<Cond/>
+<LocList>
+<Loc EndOffset="3667" SrcFileId="1" StartOffset="3614"/>
+</LocList>
+<StmntSeq Intrnl_Id="58">
+<LocList>
+<Loc EndOffset="3638" SrcFileId="1" StartOffset="3621"/>
+<Loc EndOffset="3661" SrcFileId="1" StartOffset="3644"/>
+</LocList>
+<BasicStmnt CovItemId="S19" CovItemPrefix="Gioco.java" Intrnl_Id="59">
+<LocList>
+<Loc EndOffset="3638" SrcFileId="1" StartOffset="3621"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S20" CovItemPrefix="Gioco.java" Intrnl_Id="60">
+<LocList>
+<Loc EndOffset="3661" SrcFileId="1" StartOffset="3644"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B8" CovItemPrefix="Gioco.java" Implct="true" Intrnl_Id="61">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="62">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="3599" SrcFileId="1" StartOffset="3597"/>
+<LocList>
+<Loc EndOffset="3667" SrcFileId="1" StartOffset="3597"/>
+</LocList>
+<RootTerm CovItemId="C7" CovItemPrefix="Gioco.java" Intrnl_Id="63">
+<BasicBoolTerm Intrnl_Id="64">
+<LocList>
+<Loc EndOffset="3612" SrcFileId="1" StartOffset="3600"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<CondStmnt CovItemId="S21" CovItemPrefix="Gioco.java" Intrnl_Id="65">
+<Branch CovItemId="B9" CovItemPrefix="Gioco.java" Implct="false" Intrnl_Id="66">
+<Cond/>
+<LocList>
+<Loc EndOffset="3866" SrcFileId="1" StartOffset="3840"/>
+</LocList>
+<StmntSeq Intrnl_Id="67">
+<LocList>
+<Loc EndOffset="3866" SrcFileId="1" StartOffset="3840"/>
+</LocList>
+<BasicStmnt CovItemId="S22" CovItemPrefix="Gioco.java" Intrnl_Id="68">
+<LocList>
+<Loc EndOffset="3866" SrcFileId="1" StartOffset="3840"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B10" CovItemPrefix="Gioco.java" Implct="true" Intrnl_Id="69">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="70">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="3821" SrcFileId="1" StartOffset="3819"/>
+<LocList>
+<Loc EndOffset="3866" SrcFileId="1" StartOffset="3819"/>
+</LocList>
+<RootTerm CovItemId="C8" CovItemPrefix="Gioco.java" Intrnl_Id="71">
+<BasicBoolTerm Intrnl_Id="72">
+<LocList>
+<Loc EndOffset="3833" SrcFileId="1" StartOffset="3822"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+</StmntSeq>
+<Keyword EndOffset="3418" SrcFileId="1" StartOffset="3415"/>
+<LocList>
+<Loc EndOffset="3872" SrcFileId="1" StartOffset="3415"/>
+</LocList>
+<RootTerm CovItemId="C5" CovItemPrefix="Gioco.java" Intrnl_Id="73">
+<BasicBoolTerm Intrnl_Id="74">
+<LocList>
+<Loc EndOffset="3445" SrcFileId="1" StartOffset="3430"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</LoopStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="151" HierarchyLvlTypeId="3" Intrnl_Id="75" Name="secondoControllo">
+<Header>
+<Loc EndOffset="4100" SrcFileId="1" StartOffset="4070"/>
+</Header>
+<LocList>
+<Loc EndOffset="4496" SrcFileId="1" StartOffset="4070"/>
+</LocList>
+<StmntSeq Intrnl_Id="76">
+<LocList>
+<Loc EndOffset="4492" SrcFileId="1" StartOffset="4106"/>
+</LocList>
+<LoopStmnt CovItemId="S23" CovItemPrefix="Gioco.java" Intrnl_Id="77" MltplExecId="L4-2" MltplExecPrefix="Gioco.java" NvrExecId="L4-0" NvrExecPrefix="Gioco.java" OnceExecutedId="L4-1" OnceExecutedPrefix="Gioco.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="78">
+<LocList>
+<Loc EndOffset="4487" SrcFileId="1" StartOffset="4229"/>
+</LocList>
+<CondStmnt CovItemId="S24" CovItemPrefix="Gioco.java" Intrnl_Id="79">
+<Branch CovItemId="B11" CovItemPrefix="Gioco.java" Implct="false" Intrnl_Id="80">
+<Cond/>
+<LocList>
+<Loc EndOffset="4284" SrcFileId="1" StartOffset="4266"/>
+</LocList>
+<StmntSeq Intrnl_Id="81">
+<LocList>
+<Loc EndOffset="4284" SrcFileId="1" StartOffset="4266"/>
+</LocList>
+<BasicStmnt CovItemId="S25" CovItemPrefix="Gioco.java" Intrnl_Id="82">
+<LocList>
+<Loc EndOffset="4284" SrcFileId="1" StartOffset="4266"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B12" CovItemPrefix="Gioco.java" Implct="false" Intrnl_Id="83">
+<Cond>
+<Loc EndOffset="4399" SrcFileId="1" StartOffset="4395"/>
+</Cond>
+<LocList>
+<Loc EndOffset="4487" SrcFileId="1" StartOffset="4400"/>
+</LocList>
+<StmntSeq Intrnl_Id="84">
+<LocList>
+<Loc EndOffset="4487" SrcFileId="1" StartOffset="4400"/>
+</LocList>
+<CondStmnt CovItemId="S26" CovItemPrefix="Gioco.java" Intrnl_Id="85">
+<Branch CovItemId="B13" CovItemPrefix="Gioco.java" Implct="false" Intrnl_Id="86">
+<Cond/>
+<LocList>
+<Loc EndOffset="4487" SrcFileId="1" StartOffset="4434"/>
+</LocList>
+<StmntSeq Intrnl_Id="87">
+<LocList>
+<Loc EndOffset="4458" SrcFileId="1" StartOffset="4441"/>
+<Loc EndOffset="4481" SrcFileId="1" StartOffset="4464"/>
+</LocList>
+<BasicStmnt CovItemId="S27" CovItemPrefix="Gioco.java" Intrnl_Id="88">
+<LocList>
+<Loc EndOffset="4458" SrcFileId="1" StartOffset="4441"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S28" CovItemPrefix="Gioco.java" Intrnl_Id="89">
+<LocList>
+<Loc EndOffset="4481" SrcFileId="1" StartOffset="4464"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B14" CovItemPrefix="Gioco.java" Implct="true" Intrnl_Id="90">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="91">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="4402" SrcFileId="1" StartOffset="4400"/>
+<LocList>
+<Loc EndOffset="4487" SrcFileId="1" StartOffset="4400"/>
+</LocList>
+<RootTerm CovItemId="C11" CovItemPrefix="Gioco.java" Intrnl_Id="92">
+<OpTerm BooleanOpId="2" Intrnl_Id="93">
+<BasicBoolTerm Intrnl_Id="94">
+<LocList>
+<Loc EndOffset="4414" SrcFileId="1" StartOffset="4403"/>
+</LocList>
+</BasicBoolTerm>
+<BasicBoolTerm Intrnl_Id="95">
+<LocList>
+<Loc EndOffset="4432" SrcFileId="1" StartOffset="4418"/>
+</LocList>
+</BasicBoolTerm>
+<LocList>
+<Loc EndOffset="4417" SrcFileId="1" StartOffset="4415"/>
+</LocList>
+</OpTerm>
+</RootTerm>
+</CondStmnt>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="4231" SrcFileId="1" StartOffset="4229"/>
+<LocList>
+<Loc EndOffset="4487" SrcFileId="1" StartOffset="4229"/>
+</LocList>
+<RootTerm CovItemId="C10" CovItemPrefix="Gioco.java" Intrnl_Id="96">
+<OpTerm BooleanOpId="2" Intrnl_Id="97">
+<BasicBoolTerm Intrnl_Id="98">
+<LocList>
+<Loc EndOffset="4243" SrcFileId="1" StartOffset="4232"/>
+</LocList>
+</BasicBoolTerm>
+<BasicBoolTerm Intrnl_Id="99">
+<LocList>
+<Loc EndOffset="4259" SrcFileId="1" StartOffset="4247"/>
+</LocList>
+</BasicBoolTerm>
+<LocList>
+<Loc EndOffset="4246" SrcFileId="1" StartOffset="4244"/>
+</LocList>
+</OpTerm>
+</RootTerm>
+</CondStmnt>
+</StmntSeq>
+<Keyword EndOffset="4109" SrcFileId="1" StartOffset="4106"/>
+<LocList>
+<Loc EndOffset="4492" SrcFileId="1" StartOffset="4106"/>
+</LocList>
+<RootTerm CovItemId="C9" CovItemPrefix="Gioco.java" Intrnl_Id="100">
+<BasicBoolTerm Intrnl_Id="101">
+<LocList>
+<Loc EndOffset="4136" SrcFileId="1" StartOffset="4121"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</LoopStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="152" HierarchyLvlTypeId="3" Intrnl_Id="102" Name="print">
+<Header>
+<Loc EndOffset="4618" SrcFileId="1" StartOffset="4599"/>
+</Header>
+<LocList>
+<Loc EndOffset="5023" SrcFileId="1" StartOffset="4599"/>
+</LocList>
+<StmntSeq Intrnl_Id="103">
+<LocList>
+<Loc EndOffset="4990" SrcFileId="1" StartOffset="4624"/>
+<Loc EndOffset="5019" SrcFileId="1" StartOffset="4994"/>
+</LocList>
+<LoopStmnt CovItemId="S29" CovItemPrefix="Gioco.java" Intrnl_Id="104" MltplExecId="L5-2" MltplExecPrefix="Gioco.java" NvrExecId="L5-0" NvrExecPrefix="Gioco.java" OnceExecutedId="L5-1" OnceExecutedPrefix="Gioco.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="105">
+<LocList>
+<Loc EndOffset="4985" SrcFileId="1" StartOffset="4667"/>
+</LocList>
+<CondStmnt CovItemId="S30" CovItemPrefix="Gioco.java" Intrnl_Id="106">
+<Branch CovItemId="B15" CovItemPrefix="Gioco.java" Implct="false" Intrnl_Id="107">
+<Cond/>
+<LocList>
+<Loc EndOffset="4771" SrcFileId="1" StartOffset="4694"/>
+</LocList>
+<StmntSeq Intrnl_Id="108">
+<LocList>
+<Loc EndOffset="4771" SrcFileId="1" StartOffset="4694"/>
+</LocList>
+<BasicStmnt CovItemId="S31" CovItemPrefix="Gioco.java" Intrnl_Id="109">
+<LocList>
+<Loc EndOffset="4771" SrcFileId="1" StartOffset="4694"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B16" CovItemPrefix="Gioco.java" Implct="false" Intrnl_Id="110">
+<Cond>
+<Loc EndOffset="4780" SrcFileId="1" StartOffset="4776"/>
+</Cond>
+<LocList>
+<Loc EndOffset="4985" SrcFileId="1" StartOffset="4781"/>
+</LocList>
+<StmntSeq Intrnl_Id="111">
+<LocList>
+<Loc EndOffset="4985" SrcFileId="1" StartOffset="4781"/>
+</LocList>
+<CondStmnt CovItemId="S32" CovItemPrefix="Gioco.java" Intrnl_Id="112">
+<Branch CovItemId="B17" CovItemPrefix="Gioco.java" Implct="false" Intrnl_Id="113">
+<Cond/>
+<LocList>
+<Loc EndOffset="4892" SrcFileId="1" StartOffset="4808"/>
+</LocList>
+<StmntSeq Intrnl_Id="114">
+<LocList>
+<Loc EndOffset="4892" SrcFileId="1" StartOffset="4808"/>
+</LocList>
+<BasicStmnt CovItemId="S33" CovItemPrefix="Gioco.java" Intrnl_Id="115">
+<LocList>
+<Loc EndOffset="4892" SrcFileId="1" StartOffset="4808"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B18" CovItemPrefix="Gioco.java" Implct="false" Intrnl_Id="116">
+<Cond>
+<Loc EndOffset="4901" SrcFileId="1" StartOffset="4897"/>
+</Cond>
+<LocList>
+<Loc EndOffset="4985" SrcFileId="1" StartOffset="4907"/>
+</LocList>
+<StmntSeq Intrnl_Id="117">
+<LocList>
+<Loc EndOffset="4985" SrcFileId="1" StartOffset="4907"/>
+</LocList>
+<BasicStmnt CovItemId="S34" CovItemPrefix="Gioco.java" Intrnl_Id="118">
+<LocList>
+<Loc EndOffset="4985" SrcFileId="1" StartOffset="4907"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="4783" SrcFileId="1" StartOffset="4781"/>
+<LocList>
+<Loc EndOffset="4985" SrcFileId="1" StartOffset="4781"/>
+</LocList>
+<RootTerm CovItemId="C14" CovItemPrefix="Gioco.java" Intrnl_Id="119">
+<BasicBoolTerm Intrnl_Id="120">
+<LocList>
+<Loc EndOffset="4801" SrcFileId="1" StartOffset="4784"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="4669" SrcFileId="1" StartOffset="4667"/>
+<LocList>
+<Loc EndOffset="4985" SrcFileId="1" StartOffset="4667"/>
+</LocList>
+<RootTerm CovItemId="C13" CovItemPrefix="Gioco.java" Intrnl_Id="121">
+<BasicBoolTerm Intrnl_Id="122">
+<LocList>
+<Loc EndOffset="4687" SrcFileId="1" StartOffset="4670"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+</StmntSeq>
+<Keyword EndOffset="4627" SrcFileId="1" StartOffset="4624"/>
+<LocList>
+<Loc EndOffset="4990" SrcFileId="1" StartOffset="4624"/>
+</LocList>
+<RootTerm CovItemId="C12" CovItemPrefix="Gioco.java" Intrnl_Id="123">
+<BasicBoolTerm Intrnl_Id="124">
+<LocList>
+<Loc EndOffset="4654" SrcFileId="1" StartOffset="4639"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</LoopStmnt>
+<BasicStmnt CovItemId="S35" CovItemPrefix="Gioco.java" Intrnl_Id="125">
+<LocList>
+<Loc EndOffset="5019" SrcFileId="1" StartOffset="4994"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+</HierarchyLvl>
+</HierarchyLvl>
+</MASTRoot>
+</TestSessionContainer>

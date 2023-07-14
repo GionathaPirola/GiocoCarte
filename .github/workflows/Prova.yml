@@ -15,8 +15,6 @@ jobs:
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: Clean meaven
-        run: mvn clean install -DskipTests   
+          restore-keys: ${{ runner.os }}-m2 
       - name: Run tests with Maven
         run: mvn -B test --file pom.xml

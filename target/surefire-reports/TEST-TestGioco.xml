@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="TestGioco" time="0.068" tests="4" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="TestGioco" time="0.07" tests="4" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -15,7 +15,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="IT"/>
     <property name="sun.boot.library.path" value="C:\Documenti\UniBG\Programmi\tools_x_tvsw_2023\asmeta_eclipse\eclipse_latest\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.7.v20230425-1502\jre\bin"/>
-    <property name="sun.java.command" value="C:\Users\giona\AppData\Local\Temp\surefire7352474964309149697\surefirebooter-20230714134840328_3.jar C:\Users\giona\AppData\Local\Temp\surefire7352474964309149697 2023-07-14T13-48-38_899-jvmRun1 surefire-20230714134840328_1tmp surefire_0-20230714134840328_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\giona\AppData\Local\Temp\surefire6367193124599060985\surefirebooter-20230714135220024_3.jar C:\Users\giona\AppData\Local\Temp\surefire6367193124599060985 2023-07-14T13-52-19_818-jvmRun1 surefire-20230714135220024_1tmp surefire_0-20230714135220024_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="C:\Documenti\UniBG\Materie\Testing\Progetto_TestingCI\GiocoCarte\target\test-classes;C:\Documenti\UniBG\Materie\Testing\Progetto_TestingCI\GiocoCarte\target\classes;C:\Users\giona\.m2\repository\org\junit\jupiter\junit-jupiter\5.9.3\junit-jupiter-5.9.3.jar;C:\Users\giona\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.9.3\junit-jupiter-api-5.9.3.jar;C:\Users\giona\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;C:\Users\giona\.m2\repository\org\junit\platform\junit-platform-commons\1.9.3\junit-platform-commons-1.9.3.jar;C:\Users\giona\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\giona\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.9.3\junit-jupiter-params-5.9.3.jar;C:\Users\giona\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.9.3\junit-jupiter-engine-5.9.3.jar;C:\Users\giona\.m2\repository\org\junit\platform\junit-platform-engine\1.9.3\junit-platform-engine-1.9.3.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -31,7 +31,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\giona\AppData\Local\Temp\surefire7352474964309149697\surefirebooter-20230714134840328_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\giona\AppData\Local\Temp\surefire6367193124599060985\surefirebooter-20230714135220024_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="17.0.7+7"/>
@@ -58,7 +58,7 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="61.0"/>
   </properties>
-  <testcase name="testCondizioni" classname="TestGioco" time="0.037">
+  <testcase name="testCondizioni" classname="TestGioco" time="0.035">
     <system-out><![CDATA[Giocatore 0 ha in mano: 5-> PUO GIOCARE
 Giocatore 1 ha in mano: 3-> PUO GIOCARE
 Giocatore 2 ha in mano: 5-> PUO GIOCARE
@@ -71,7 +71,7 @@ Giocatore 2 ha in mano: 8-> WIN!
 
 ]]></system-out>
   </testcase>
-  <testcase name="testMCDC" classname="TestGioco" time="0.001">
+  <testcase name="testMCDC" classname="TestGioco" time="0.002">
     <system-out><![CDATA[Giocatore 0 ha in mano: 5-> PUO GIOCARE
 Giocatore 1 ha in mano: 3-> PUO GIOCARE
 Giocatore 2 ha in mano: 5-> PUO GIOCARE

@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="UTF-8"?><TestSessionContainer xmlns="http://www.codecover.org/xml/testsession-container" Date="1689332085262" TestSessionContainerId="ef730f56-db3a-4764-bbb1-c81ab25428a2" version="1.0">
+    <SrcFileList>
+        <SrcFile Content="public class Gioco {&#13;&#10;&#9;/*@spec_public@*/ int[] mano;&#13;&#10;&#9;private /*@spec_public@*/ int[] vincitori;&#13;&#10;&#9;private /*@spec_public@*/ int vittoria;&#13;&#10;&#9;private /*@spec_public@*/ int controllo;&#13;&#10;&#9;&#13;&#10;&#9;//@public invariant  mano!=null;&#13;&#10;&#9;//@public invariant vincitori!=null;&#13;&#10;&#9;//@public invariant (\forall int x; 0&lt;=x &amp;&amp;  x&lt;vincitori.length; vincitori[x]&gt;=-1 &amp;&amp; vincitori[x]&lt;=1);&#13;&#10;&#9;&#13;&#10;&#9;&#13;&#10;&#9;//In input voglio almeno un giocatore&#13;&#10;&#9;&#9;//@requires giocatori &gt; 0 &amp;&amp; giocatori &lt; 1000;&#13;&#10;&#9;&#13;&#10;&#9;//Inserisco anche qua le stesse condizioni dell'invariante in quanto l'invariante funziona dopo il costruttore&#13;&#10;&#9;&#9;//@ensures mano!= null;&#13;&#10;&#9;&#9;//@ensures vincitori!=null;&#13;&#10;&#9;&#13;&#10;&#9;//Controllo che vittoria venga impostata a -1;&#13;&#10;&#9;&#9;//@ensures vittoria == -1;&#13;&#10;&#9;&#13;&#10;&#9;//Controllo che i vettori mano e vincitori siano della lunghezza corretta&#13;&#10;&#9;&#9;//@ensures (mano.length == giocatori) &amp;&amp; (vincitori.length == giocatori);&#13;&#10;&#9;//Controllo che i vettori mano e vincitori siano inizializzati a zero&#13;&#10;&#9;&#9;//@ensures (\forall int x; 0&lt;=x &amp;&amp;  x&lt;giocatori; mano[x]==0 &amp;&amp; vincitori[x]==0);&#13;&#10;&#9;public Gioco(int giocatori) {&#13;&#10;&#9;&#9;//All'inizio nessuno ha vinto&#13;&#10;&#9;&#9;this.vittoria = -1;&#13;&#10;&#9;&#9;this.mano = new int[giocatori];&#13;&#10;&#9;&#9;this.vincitori = new int[giocatori];&#13;&#10;&#9;&#9;//@loop_invariant (\forall int x; 0&lt;=x &amp;&amp;  x&lt;i; mano[x]==0 &amp;&amp; vincitori[x]==0);&#13;&#10;&#9;&#9;//@loop_invariant i &gt;= 0;&#13;&#10;&#9;&#9;for(int i = 0; i &lt; giocatori; i++) {&#13;&#10;&#9;&#9;&#9;this.mano[i] = 0;&#13;&#10;&#9;&#9;&#9;this.vincitori[i] = 0;&#13;&#10;&#9;&#9;}&#13;&#10;&#9;}&#13;&#10;&#9;&#13;&#10;&#9;&#13;&#10;&#9;&#13;&#10;&#9;//@diverges true;&#13;&#10;&#9;&#13;&#10;&#9;//Richiedo che il vettore delle pescate sia lungo uguale al numero di giocatori&#13;&#10;&#9;&#9;//@requires pescate.length == mano.length;&#13;&#10;&#9;&#13;&#10;&#9;//Richiedo che il vettore delle pescate abbia numeri positivi, compresi tra uno e sette&#13;&#10;&#9;&#9;//@requires (\forall int x; 0&lt;=x &amp;&amp;  x&lt;pescate.length; pescate[x]&gt;0 &amp;&amp; pescate[x]&lt;8);&#13;&#10;&#9;&#13;&#10;&#9;//Controllo che la mano piu la pescate non superi il numero 20&#13;&#10;&#9;&#9;//@requires (\forall int x; 0&lt;=x &amp;&amp;  x&lt;mano.length; (mano[x]+pescate[x])&gt;=0 &amp;&amp; (mano[x]+pescate[x])&lt;=20);&#13;&#10;&#9;&#13;&#10;&#9;//Controllo che vittoria sia un numero compreso tra -1 (nessuno ha ancora vinto) e il numero dei giocatori&#13;&#10;&#9;&#9;//@ensures (vittoria &gt;=-1) &amp;&amp; (vittoria&lt;=mano.length);&#13;&#10;&#9;&#13;&#10;&#9;//Controllo che in mano non abbia piu di 14&#13;&#10;&#9;&#9;//@ensures (\forall int x; 0&lt;=x &amp;&amp;  x&lt;mano.length; mano[x]&gt;=0 &amp;&amp; mano[x]&lt;=14);&#13;&#10;&#9;&#13;&#10;&#9;//Controllo che il risultato sia compreso tra -1 ed il numero di giocatori&#13;&#10;&#9;&#9;//@ensures (\result &gt;=-1) &amp;&amp; (\result&lt;=mano.length);&#13;&#10;&#9;public int giocata(int[] pescate) {&#13;&#10;&#9;&#9;if(vittoria == -1) {&#13;&#10;&#9;&#9;&#9;int i = 0;&#13;&#10;&#9;&#9;&#9;//@loop_invariant i&gt;=0 &amp;&amp; i&lt;=mano.length;&#13;&#10;&#9;&#9;&#9;//@loop_invariant (\forall int x; 0&lt;=x &amp;&amp; x&lt;i; mano[x]&gt;=0 &amp;&amp; mano[x]&lt;=20);&#13;&#10;&#9;&#9;&#9;for(i = 0; i &lt; mano.length; i++) {&#13;&#10;&#9;&#9;&#9;&#9;//Se non si ha ancora perso ne vinto allora si puo pescare&#13;&#10;&#9;&#9;&#9;&#9;if(vincitori[i] == 0)&#13;&#10;&#9;&#9;&#9;&#9;&#9;mano[i] = mano[i] + pescate[i];&#13;&#10;&#9;&#9;&#9;}&#13;&#10;&#9;&#9;&#9;primoControllo();&#13;&#10;&#9;&#9;&#9;//@assert (vittoria &gt;=-1) &amp;&amp; (vittoria&lt;=mano.length);&#13;&#10;&#9;&#9;&#9;secondoControllo();&#13;&#10;&#9;&#9;&#9;//@assert (vittoria &gt;=-1) &amp;&amp; (vittoria&lt;=mano.length);&#13;&#10;&#9;&#9;}&#13;&#10;&#9;&#9;return vittoria;&#13;&#10;&#9;}&#13;&#10;&#9;&#13;&#10;&#9;&#13;&#10;&#9;//@diverges true;&#13;&#10;&#9;&#13;&#10;&#9;//Tutti devono avere o vinto o perso o possono continuare a giocare&#13;&#10;&#9;&#9;//@ensures (\forall int x; 0&lt;=x &amp;&amp; x&lt;vincitori.length; (vincitori[x]==-1) || (vincitori[x]==0) || (vincitori[x]==1));&#13;&#10;&#9;public void primoControllo() {&#13;&#10;&#9;&#9;this.controllo = 0;&#13;&#10;&#9;&#9;int i = 0;&#13;&#10;&#9;&#9;//Chi ha in mano piu di otto ha perso&#13;&#10;&#9;&#9;&#9;//@loop_invariant (\forall int x; 0&lt;=x &amp;&amp; x&lt;i; (mano[x]&gt;8) ==&gt; (vincitori[x]==-1));&#13;&#10;&#9;&#9;//Chi ha in mano esattamente otto ha vinto&#13;&#10;&#9;&#9;&#9;//@loop_invariant (\forall int x; 0&lt;=x &amp;&amp; x&lt;i; (mano[x]==8) ==&gt; (vincitori[x]==1));&#13;&#10;&#9;&#9;for(i = 0; i &lt; mano.length; i++) {&#13;&#10;&#9;&#9;&#9;//Se in mano si ha piu di otto si perde&#13;&#10;&#9;&#9;&#9;if(mano[i] &gt; 8)&#13;&#10;&#9;&#9;&#9;&#9;vincitori[i] = - 1;&#13;&#10;&#9;&#9;&#9;//Se in mano si ha esattamente otto, si vince&#13;&#10;&#9;&#9;&#9;if(mano[i] == 8) {&#13;&#10;&#9;&#9;&#9;&#9;vincitori[i] = 1;&#13;&#10;&#9;&#9;&#9;&#9;vittoria = i + 1;&#13;&#10;&#9;&#9;&#9;}&#13;&#10;&#9;&#9;&#9;//Se in mano si ha meno di otto, si puo continuare a giocare a patto che nessuno abbia fatto esattamente otto (Controllato nel secondo metodo)&#13;&#10;&#9;&#9;&#9;if(mano[i] &lt; 8)&#13;&#10;&#9;&#9;&#9;&#9;controllo = controllo + 1; &#13;&#10;&#9;&#9;}&#13;&#10;&#9;}&#13;&#10;&#9;&#13;&#10;&#13;&#10;&#9;//Tutti devono avere o vinto o perso o possono continuare a giocare&#13;&#10;&#9;&#9;//@ensures (\forall int x; 0&lt;=x &amp;&amp; x&lt;mano.length; (vincitori[x]==-1) || (vincitori[x]==0) || (vincitori[x]==1));&#13;&#10;&#9;public void secondoControllo() {&#13;&#10;&#9;&#9;for(int i = 0; i &lt; mano.length; i++) {&#13;&#10;&#9;&#9;&#9;//Se in mano si ha meno di 8, pero qualcuno ha gia vinto allora si ha perso&#13;&#10;&#9;&#9;&#9;if(mano[i] &lt; 8 &amp;&amp; vittoria!=-1)&#13;&#10;&#9;&#9;&#9;&#9;vincitori[i] = -1;&#13;&#10;&#9;&#9;&#9;//Se in mano si ha mano di otto, pero tutti gli altri hanno tutti superato l'otto, allora si ha vinto&#13;&#10;&#9;&#9;&#9;else if(mano[i] &lt; 8 &amp;&amp; controllo == 1) {&#13;&#10;&#9;&#9;&#9;&#9;vincitori[i] = 1;&#13;&#10;&#9;&#9;&#9;&#9;vittoria = i + 1;&#13;&#10;&#9;&#9;&#9;}&#13;&#10;&#9;&#9;}&#13;&#10;&#9;}&#13;&#10;&#9;&#13;&#10;&#9;//Il metodo print viene escluso da jml per problemi di efficenza da parte del solver z3_4_3&#13;&#10;&#9;public void print() {&#13;&#10;&#9;&#9;for(int i = 0; i &lt; mano.length; i++) {&#13;&#10;&#9;&#9;&#9;if(vincitori[i] == 1)&#13;&#10;&#9;&#9;&#9;&#9;System.out.println(&quot;Giocatore &quot; + i + &quot; ha in mano: &quot; + mano[i] + &quot;-&gt; WIN!&quot;);&#13;&#10;&#9;&#9;&#9;else if(vincitori[i] == 0)&#13;&#10;&#9;&#9;&#9;&#9;System.out.println(&quot;Giocatore &quot; + i + &quot; ha in mano: &quot; + mano[i] + &quot;-&gt; PUO GIOCARE&quot;);&#13;&#10;&#9;&#9;&#9;else&#13;&#10;&#9;&#9;&#9;&#9;System.out.println(&quot;Giocatore &quot; + i + &quot; ha in mano: &quot; + mano[i] + &quot;-&gt; LOSE!&quot;);&#13;&#10;&#9;&#9;}&#13;&#10;&#9;&#9;System.out.println(&quot;\n&quot;);&#13;&#10;&#9;}&#13;&#10;}&#13;&#10;" Filename="Gioco.java" Intrnl_Id="1"/>
+    </SrcFileList>
+    <CritList>
+        <CritListEntry Name="org.codecover.model.utils.criteria.ConditionCoverage" PluginName="org.codecover"/>
+        <CritListEntry Name="org.codecover.model.utils.criteria.BranchCoverage" PluginName="org.codecover"/>
+        <CritListEntry Name="org.codecover.model.utils.criteria.StatementCoverage" PluginName="org.codecover"/>
+    </CritList>
+    <BoolOpList>
+        <BoolOp Arity="2" Intrnl_Id="2" Name="conditional and (&amp;&amp;)">
+            <BoolAssgnmntBoolMapList>
+                <MapEntry BoolAssgnmnt="02" Value="false"/>
+                <MapEntry BoolAssgnmnt="10" Value="false"/>
+                <MapEntry BoolAssgnmnt="11" Value="true"/>
+            </BoolAssgnmntBoolMapList>
+        </BoolOp>
+    </BoolOpList>
+    <HierarchyLvlTypeList>
+        <HierarchyLvlType EnglishName="method" IntrnlName="method" Intrnl_Id="3"/>
+        <HierarchyLvlType EnglishName="class" IntrnlName="class" Intrnl_Id="4"/>
+        <HierarchyLvlType EnglishName="default package" IntrnlName="default package" Intrnl_Id="5"/>
+    </HierarchyLvlTypeList>
+    <MASTRoot>
+        <HierarchyLvl HierarchyLvlId="2542" HierarchyLvlTypeId="5" Intrnl_Id="6" Name="default package">
+            <Header/>
+            <LocList/>
+            <HierarchyLvl HierarchyLvlId="2541" HierarchyLvlTypeId="4" Intrnl_Id="7" Name="Gioco">
+                <Header>
+                    <Loc EndOffset="18" SrcFileId="1" StartOffset="0"/>
+                </Header>
+                <LocList>
+                    <Loc EndOffset="5085" SrcFileId="1" StartOffset="0"/>
+                </LocList>
+                <HierarchyLvl HierarchyLvlId="2536" HierarchyLvlTypeId="3" Intrnl_Id="8" Name="Gioco">
+                    <Header>
+                        <Loc EndOffset="1058" SrcFileId="1" StartOffset="1031"/>
+                    </Header>
+                    <LocList>
+                        <Loc EndOffset="1401" SrcFileId="1" StartOffset="1031"/>
+                    </LocList>
+                    <StmntSeq Intrnl_Id="9">
+                        <LocList>
+                            <Loc EndOffset="1116" SrcFileId="1" StartOffset="1097"/>
+                            <Loc EndOffset="1151" SrcFileId="1" StartOffset="1120"/>
+                            <Loc EndOffset="1191" SrcFileId="1" StartOffset="1155"/>
+                            <Loc EndOffset="1397" SrcFileId="1" StartOffset="1307"/>
+                        </LocList>
+                        <BasicStmnt CovItemId="S1" CovItemPrefix="Gioco.java" Intrnl_Id="10">
+                            <LocList>
+                                <Loc EndOffset="1116" SrcFileId="1" StartOffset="1097"/>
+                            </LocList>
+                        </BasicStmnt>
+                        <BasicStmnt CovItemId="S2" CovItemPrefix="Gioco.java" Intrnl_Id="11">
+                            <LocList>
+                                <Loc EndOffset="1151" SrcFileId="1" StartOffset="1120"/>
+                            </LocList>
+                        </BasicStmnt>
+                        <BasicStmnt CovItemId="S3" CovItemPrefix="Gioco.java" Intrnl_Id="12">
+                            <LocList>
+                                <Loc EndOffset="1191" SrcFileId="1" StartOffset="1155"/>
+                            </LocList>
+                        </BasicStmnt>
+                        <LoopStmnt CovItemId="S4" CovItemPrefix="Gioco.java" Intrnl_Id="13" MltplExecId="L1-2" MltplExecPrefix="Gioco.java" NvrExecId="L1-0" NvrExecPrefix="Gioco.java" OnceExecutedId="L1-1" OnceExecutedPrefix="Gioco.java" OptBodyExec="true">
+                            <StmntSeq Intrnl_Id="14">
+                                <LocList>
+                                    <Loc EndOffset="1365" SrcFileId="1" StartOffset="1348"/>
+                                    <Loc EndOffset="1392" SrcFileId="1" StartOffset="1370"/>
+                                </LocList>
+                                <BasicStmnt CovItemId="S5" CovItemPrefix="Gioco.java" Intrnl_Id="15">
+                                    <LocList>
+                                        <Loc EndOffset="1365" SrcFileId="1" StartOffset="1348"/>
+                                    </LocList>
+                                </BasicStmnt>
+                                <BasicStmnt CovItemId="S6" CovItemPrefix="Gioco.java" Intrnl_Id="16">
+                                    <LocList>
+                                        <Loc EndOffset="1392" SrcFileId="1" StartOffset="1370"/>
+                                    </LocList>
+                                </BasicStmnt>
+                            </StmntSeq>
+                            <Keyword EndOffset="1310" SrcFileId="1" StartOffset="1307"/>
+                            <LocList>
+                                <Loc EndOffset="1397" SrcFileId="1" StartOffset="1307"/>
+                            </LocList>
+                            <RootTerm CovItemId="C1" CovItemPrefix="Gioco.java" Intrnl_Id="17">
+                                <BasicBoolTerm Intrnl_Id="18">
+                                    <LocList>
+                                        <Loc EndOffset="1335" SrcFileId="1" StartOffset="1322"/>
+                                    </LocList>
+                                </BasicBoolTerm>
+                            </RootTerm>
+                        </LoopStmnt>
+                    </StmntSeq>
+                </HierarchyLvl>
+                <HierarchyLvl HierarchyLvlId="2537" HierarchyLvlTypeId="3" Intrnl_Id="19" Name="giocata">
+                    <Header>
+                        <Loc EndOffset="2393" SrcFileId="1" StartOffset="2360"/>
+                    </Header>
+                    <LocList>
+                        <Loc EndOffset="2924" SrcFileId="1" StartOffset="2360"/>
+                    </LocList>
+                    <StmntSeq Intrnl_Id="20">
+                        <LocList>
+                            <Loc EndOffset="2900" SrcFileId="1" StartOffset="2399"/>
+                            <Loc EndOffset="2920" SrcFileId="1" StartOffset="2904"/>
+                        </LocList>
+                        <CondStmnt CovItemId="S7" CovItemPrefix="Gioco.java" Intrnl_Id="21">
+                            <Branch CovItemId="B1" CovItemPrefix="Gioco.java" Implct="false" Intrnl_Id="22">
+                                <Cond/>
+                                <LocList>
+                                    <Loc EndOffset="2900" SrcFileId="1" StartOffset="2418"/>
+                                </LocList>
+                                <StmntSeq Intrnl_Id="23">
+                                    <LocList>
+                                        <Loc EndOffset="2434" SrcFileId="1" StartOffset="2424"/>
+                                        <Loc EndOffset="2733" SrcFileId="1" StartOffset="2564"/>
+                                        <Loc EndOffset="2755" SrcFileId="1" StartOffset="2738"/>
+                                        <Loc EndOffset="2837" SrcFileId="1" StartOffset="2818"/>
+                                    </LocList>
+                                    <BasicStmnt CovItemId="S8" CovItemPrefix="Gioco.java" Intrnl_Id="24">
+                                        <LocList>
+                                            <Loc EndOffset="2434" SrcFileId="1" StartOffset="2424"/>
+                                        </LocList>
+                                    </BasicStmnt>
+                                    <LoopStmnt CovItemId="S9" CovItemPrefix="Gioco.java" Intrnl_Id="25" MltplExecId="L2-2" MltplExecPrefix="Gioco.java" NvrExecId="L2-0" NvrExecPrefix="Gioco.java" OnceExecutedId="L2-1" OnceExecutedPrefix="Gioco.java" OptBodyExec="true">
+                                        <StmntSeq Intrnl_Id="26">
+                                            <LocList>
+                                                <Loc EndOffset="2727" SrcFileId="1" StartOffset="2668"/>
+                                            </LocList>
+                                            <CondStmnt CovItemId="S10" CovItemPrefix="Gioco.java" Intrnl_Id="27">
+                                                <Branch CovItemId="B3" CovItemPrefix="Gioco.java" Implct="false" Intrnl_Id="28">
+                                                    <Cond/>
+                                                    <LocList>
+                                                        <Loc EndOffset="2727" SrcFileId="1" StartOffset="2696"/>
+                                                    </LocList>
+                                                    <StmntSeq Intrnl_Id="29">
+                                                        <LocList>
+                                                            <Loc EndOffset="2727" SrcFileId="1" StartOffset="2696"/>
+                                                        </LocList>
+                                                        <BasicStmnt CovItemId="S11" CovItemPrefix="Gioco.java" Intrnl_Id="30">
+                                                            <LocList>
+                                                                <Loc EndOffset="2727" SrcFileId="1" StartOffset="2696"/>
+                                                            </LocList>
+                                                        </BasicStmnt>
+                                                    </StmntSeq>
+                                                </Branch>
+                                                <Branch CovItemId="B4" CovItemPrefix="Gioco.java" Implct="true" Intrnl_Id="31">
+                                                    <Cond/>
+                                                    <LocList/>
+                                                    <StmntSeq Intrnl_Id="32">
+                                                        <LocList/>
+                                                    </StmntSeq>
+                                                </Branch>
+                                                <Keyword EndOffset="2670" SrcFileId="1" StartOffset="2668"/>
+                                                <LocList>
+                                                    <Loc EndOffset="2727" SrcFileId="1" StartOffset="2668"/>
+                                                </LocList>
+                                                <RootTerm CovItemId="C4" CovItemPrefix="Gioco.java" Intrnl_Id="33">
+                                                    <BasicBoolTerm Intrnl_Id="34">
+                                                        <LocList>
+                                                            <Loc EndOffset="2688" SrcFileId="1" StartOffset="2671"/>
+                                                        </LocList>
+                                                    </BasicBoolTerm>
+                                                </RootTerm>
+                                            </CondStmnt>
+                                        </StmntSeq>
+                                        <Keyword EndOffset="2567" SrcFileId="1" StartOffset="2564"/>
+                                        <LocList>
+                                            <Loc EndOffset="2733" SrcFileId="1" StartOffset="2564"/>
+                                        </LocList>
+                                        <RootTerm CovItemId="C3" CovItemPrefix="Gioco.java" Intrnl_Id="35">
+                                            <BasicBoolTerm Intrnl_Id="36">
+                                                <LocList>
+                                                    <Loc EndOffset="2590" SrcFileId="1" StartOffset="2575"/>
+                                                </LocList>
+                                            </BasicBoolTerm>
+                                        </RootTerm>
+                                    </LoopStmnt>
+                                    <BasicStmnt CovItemId="S12" CovItemPrefix="Gioco.java" Intrnl_Id="37">
+                                        <LocList>
+                                            <Loc EndOffset="2755" SrcFileId="1" StartOffset="2738"/>
+                                        </LocList>
+                                    </BasicStmnt>
+                                    <BasicStmnt CovItemId="S13" CovItemPrefix="Gioco.java" Intrnl_Id="38">
+                                        <LocList>
+                                            <Loc EndOffset="2837" SrcFileId="1" StartOffset="2818"/>
+                                        </LocList>
+                                    </BasicStmnt>
+                                </StmntSeq>
+                            </Branch>
+                            <Branch CovItemId="B2" CovItemPrefix="Gioco.java" Implct="true" Intrnl_Id="39">
+                                <Cond/>
+                                <LocList/>
+                                <StmntSeq Intrnl_Id="40">
+                                    <LocList/>
+                                </StmntSeq>
+                            </Branch>
+                            <Keyword EndOffset="2401" SrcFileId="1" StartOffset="2399"/>
+                            <LocList>
+                                <Loc EndOffset="2900" SrcFileId="1" StartOffset="2399"/>
+                            </LocList>
+                            <RootTerm CovItemId="C2" CovItemPrefix="Gioco.java" Intrnl_Id="41">
+                                <BasicBoolTerm Intrnl_Id="42">
+                                    <LocList>
+                                        <Loc EndOffset="2416" SrcFileId="1" StartOffset="2402"/>
+                                    </LocList>
+                                </BasicBoolTerm>
+                            </RootTerm>
+                        </CondStmnt>
+                        <BasicStmnt CovItemId="S14" CovItemPrefix="Gioco.java" Intrnl_Id="43">
+                            <LocList>
+                                <Loc EndOffset="2920" SrcFileId="1" StartOffset="2904"/>
+                            </LocList>
+                        </BasicStmnt>
+                    </StmntSeq>
+                </HierarchyLvl>
+                <HierarchyLvl HierarchyLvlId="2538" HierarchyLvlTypeId="3" Intrnl_Id="44" Name="primoControllo">
+                    <Header>
+                        <Loc EndOffset="3175" SrcFileId="1" StartOffset="3147"/>
+                    </Header>
+                    <LocList>
+                        <Loc EndOffset="3938" SrcFileId="1" StartOffset="3147"/>
+                    </LocList>
+                    <StmntSeq Intrnl_Id="45">
+                        <LocList>
+                            <Loc EndOffset="3200" SrcFileId="1" StartOffset="3181"/>
+                            <Loc EndOffset="3214" SrcFileId="1" StartOffset="3204"/>
+                            <Loc EndOffset="3934" SrcFileId="1" StartOffset="3481"/>
+                        </LocList>
+                        <BasicStmnt CovItemId="S15" CovItemPrefix="Gioco.java" Intrnl_Id="46">
+                            <LocList>
+                                <Loc EndOffset="3200" SrcFileId="1" StartOffset="3181"/>
+                            </LocList>
+                        </BasicStmnt>
+                        <BasicStmnt CovItemId="S16" CovItemPrefix="Gioco.java" Intrnl_Id="47">
+                            <LocList>
+                                <Loc EndOffset="3214" SrcFileId="1" StartOffset="3204"/>
+                            </LocList>
+                        </BasicStmnt>
+                        <LoopStmnt CovItemId="S17" CovItemPrefix="Gioco.java" Intrnl_Id="48" MltplExecId="L3-2" MltplExecPrefix="Gioco.java" NvrExecId="L3-0" NvrExecPrefix="Gioco.java" OnceExecutedId="L3-1" OnceExecutedPrefix="Gioco.java" OptBodyExec="true">
+                            <StmntSeq Intrnl_Id="49">
+                                <LocList>
+                                    <Loc EndOffset="3604" SrcFileId="1" StartOffset="3564"/>
+                                    <Loc EndOffset="3729" SrcFileId="1" StartOffset="3659"/>
+                                    <Loc EndOffset="3928" SrcFileId="1" StartOffset="3881"/>
+                                </LocList>
+                                <CondStmnt CovItemId="S18" CovItemPrefix="Gioco.java" Intrnl_Id="50">
+                                    <Branch CovItemId="B5" CovItemPrefix="Gioco.java" Implct="false" Intrnl_Id="51">
+                                        <Cond/>
+                                        <LocList>
+                                            <Loc EndOffset="3604" SrcFileId="1" StartOffset="3585"/>
+                                        </LocList>
+                                        <StmntSeq Intrnl_Id="52">
+                                            <LocList>
+                                                <Loc EndOffset="3604" SrcFileId="1" StartOffset="3585"/>
+                                            </LocList>
+                                            <BasicStmnt CovItemId="S19" CovItemPrefix="Gioco.java" Intrnl_Id="53">
+                                                <LocList>
+                                                    <Loc EndOffset="3604" SrcFileId="1" StartOffset="3585"/>
+                                                </LocList>
+                                            </BasicStmnt>
+                                        </StmntSeq>
+                                    </Branch>
+                                    <Branch CovItemId="B6" CovItemPrefix="Gioco.java" Implct="true" Intrnl_Id="54">
+                                        <Cond/>
+                                        <LocList/>
+                                        <StmntSeq Intrnl_Id="55">
+                                            <LocList/>
+                                        </StmntSeq>
+                                    </Branch>
+                                    <Keyword EndOffset="3566" SrcFileId="1" StartOffset="3564"/>
+                                    <LocList>
+                                        <Loc EndOffset="3604" SrcFileId="1" StartOffset="3564"/>
+                                    </LocList>
+                                    <RootTerm CovItemId="C6" CovItemPrefix="Gioco.java" Intrnl_Id="56">
+                                        <BasicBoolTerm Intrnl_Id="57">
+                                            <LocList>
+                                                <Loc EndOffset="3578" SrcFileId="1" StartOffset="3567"/>
+                                            </LocList>
+                                        </BasicBoolTerm>
+                                    </RootTerm>
+                                </CondStmnt>
+                                <CondStmnt CovItemId="S20" CovItemPrefix="Gioco.java" Intrnl_Id="58">
+                                    <Branch CovItemId="B7" CovItemPrefix="Gioco.java" Implct="false" Intrnl_Id="59">
+                                        <Cond/>
+                                        <LocList>
+                                            <Loc EndOffset="3729" SrcFileId="1" StartOffset="3676"/>
+                                        </LocList>
+                                        <StmntSeq Intrnl_Id="60">
+                                            <LocList>
+                                                <Loc EndOffset="3700" SrcFileId="1" StartOffset="3683"/>
+                                                <Loc EndOffset="3723" SrcFileId="1" StartOffset="3706"/>
+                                            </LocList>
+                                            <BasicStmnt CovItemId="S21" CovItemPrefix="Gioco.java" Intrnl_Id="61">
+                                                <LocList>
+                                                    <Loc EndOffset="3700" SrcFileId="1" StartOffset="3683"/>
+                                                </LocList>
+                                            </BasicStmnt>
+                                            <BasicStmnt CovItemId="S22" CovItemPrefix="Gioco.java" Intrnl_Id="62">
+                                                <LocList>
+                                                    <Loc EndOffset="3723" SrcFileId="1" StartOffset="3706"/>
+                                                </LocList>
+                                            </BasicStmnt>
+                                        </StmntSeq>
+                                    </Branch>
+                                    <Branch CovItemId="B8" CovItemPrefix="Gioco.java" Implct="true" Intrnl_Id="63">
+                                        <Cond/>
+                                        <LocList/>
+                                        <StmntSeq Intrnl_Id="64">
+                                            <LocList/>
+                                        </StmntSeq>
+                                    </Branch>
+                                    <Keyword EndOffset="3661" SrcFileId="1" StartOffset="3659"/>
+                                    <LocList>
+                                        <Loc EndOffset="3729" SrcFileId="1" StartOffset="3659"/>
+                                    </LocList>
+                                    <RootTerm CovItemId="C7" CovItemPrefix="Gioco.java" Intrnl_Id="65">
+                                        <BasicBoolTerm Intrnl_Id="66">
+                                            <LocList>
+                                                <Loc EndOffset="3674" SrcFileId="1" StartOffset="3662"/>
+                                            </LocList>
+                                        </BasicBoolTerm>
+                                    </RootTerm>
+                                </CondStmnt>
+                                <CondStmnt CovItemId="S23" CovItemPrefix="Gioco.java" Intrnl_Id="67">
+                                    <Branch CovItemId="B9" CovItemPrefix="Gioco.java" Implct="false" Intrnl_Id="68">
+                                        <Cond/>
+                                        <LocList>
+                                            <Loc EndOffset="3928" SrcFileId="1" StartOffset="3902"/>
+                                        </LocList>
+                                        <StmntSeq Intrnl_Id="69">
+                                            <LocList>
+                                                <Loc EndOffset="3928" SrcFileId="1" StartOffset="3902"/>
+                                            </LocList>
+                                            <BasicStmnt CovItemId="S24" CovItemPrefix="Gioco.java" Intrnl_Id="70">
+                                                <LocList>
+                                                    <Loc EndOffset="3928" SrcFileId="1" StartOffset="3902"/>
+                                                </LocList>
+                                            </BasicStmnt>
+                                        </StmntSeq>
+                                    </Branch>
+                                    <Branch CovItemId="B10" CovItemPrefix="Gioco.java" Implct="true" Intrnl_Id="71">
+                                        <Cond/>
+                                        <LocList/>
+                                        <StmntSeq Intrnl_Id="72">
+                                            <LocList/>
+                                        </StmntSeq>
+                                    </Branch>
+                                    <Keyword EndOffset="3883" SrcFileId="1" StartOffset="3881"/>
+                                    <LocList>
+                                        <Loc EndOffset="3928" SrcFileId="1" StartOffset="3881"/>
+                                    </LocList>
+                                    <RootTerm CovItemId="C8" CovItemPrefix="Gioco.java" Intrnl_Id="73">
+                                        <BasicBoolTerm Intrnl_Id="74">
+                                            <LocList>
+                                                <Loc EndOffset="3895" SrcFileId="1" StartOffset="3884"/>
+                                            </LocList>
+                                        </BasicBoolTerm>
+                                    </RootTerm>
+                                </CondStmnt>
+                            </StmntSeq>
+                            <Keyword EndOffset="3484" SrcFileId="1" StartOffset="3481"/>
+                            <LocList>
+                                <Loc EndOffset="3934" SrcFileId="1" StartOffset="3481"/>
+                            </LocList>
+                            <RootTerm CovItemId="C5" CovItemPrefix="Gioco.java" Intrnl_Id="75">
+                                <BasicBoolTerm Intrnl_Id="76">
+                                    <LocList>
+                                        <Loc EndOffset="3507" SrcFileId="1" StartOffset="3492"/>
+                                    </LocList>
+                                </BasicBoolTerm>
+                            </RootTerm>
+                        </LoopStmnt>
+                    </StmntSeq>
+                </HierarchyLvl>
+                <HierarchyLvl HierarchyLvlId="2539" HierarchyLvlTypeId="3" Intrnl_Id="77" Name="secondoControllo">
+                    <Header>
+                        <Loc EndOffset="4162" SrcFileId="1" StartOffset="4132"/>
+                    </Header>
+                    <LocList>
+                        <Loc EndOffset="4558" SrcFileId="1" StartOffset="4132"/>
+                    </LocList>
+                    <StmntSeq Intrnl_Id="78">
+                        <LocList>
+                            <Loc EndOffset="4554" SrcFileId="1" StartOffset="4168"/>
+                        </LocList>
+                        <LoopStmnt CovItemId="S25" CovItemPrefix="Gioco.java" Intrnl_Id="79" MltplExecId="L4-2" MltplExecPrefix="Gioco.java" NvrExecId="L4-0" NvrExecPrefix="Gioco.java" OnceExecutedId="L4-1" OnceExecutedPrefix="Gioco.java" OptBodyExec="true">
+                            <StmntSeq Intrnl_Id="80">
+                                <LocList>
+                                    <Loc EndOffset="4549" SrcFileId="1" StartOffset="4291"/>
+                                </LocList>
+                                <CondStmnt CovItemId="S26" CovItemPrefix="Gioco.java" Intrnl_Id="81">
+                                    <Branch CovItemId="B11" CovItemPrefix="Gioco.java" Implct="false" Intrnl_Id="82">
+                                        <Cond/>
+                                        <LocList>
+                                            <Loc EndOffset="4346" SrcFileId="1" StartOffset="4328"/>
+                                        </LocList>
+                                        <StmntSeq Intrnl_Id="83">
+                                            <LocList>
+                                                <Loc EndOffset="4346" SrcFileId="1" StartOffset="4328"/>
+                                            </LocList>
+                                            <BasicStmnt CovItemId="S27" CovItemPrefix="Gioco.java" Intrnl_Id="84">
+                                                <LocList>
+                                                    <Loc EndOffset="4346" SrcFileId="1" StartOffset="4328"/>
+                                                </LocList>
+                                            </BasicStmnt>
+                                        </StmntSeq>
+                                    </Branch>
+                                    <Branch CovItemId="B12" CovItemPrefix="Gioco.java" Implct="false" Intrnl_Id="85">
+                                        <Cond>
+                                            <Loc EndOffset="4461" SrcFileId="1" StartOffset="4457"/>
+                                        </Cond>
+                                        <LocList>
+                                            <Loc EndOffset="4549" SrcFileId="1" StartOffset="4462"/>
+                                        </LocList>
+                                        <StmntSeq Intrnl_Id="86">
+                                            <LocList>
+                                                <Loc EndOffset="4549" SrcFileId="1" StartOffset="4462"/>
+                                            </LocList>
+                                            <CondStmnt CovItemId="S28" CovItemPrefix="Gioco.java" Intrnl_Id="87">
+                                                <Branch CovItemId="B13" CovItemPrefix="Gioco.java" Implct="false" Intrnl_Id="88">
+                                                    <Cond/>
+                                                    <LocList>
+                                                        <Loc EndOffset="4549" SrcFileId="1" StartOffset="4496"/>
+                                                    </LocList>
+                                                    <StmntSeq Intrnl_Id="89">
+                                                        <LocList>
+                                                            <Loc EndOffset="4520" SrcFileId="1" StartOffset="4503"/>
+                                                            <Loc EndOffset="4543" SrcFileId="1" StartOffset="4526"/>
+                                                        </LocList>
+                                                        <BasicStmnt CovItemId="S29" CovItemPrefix="Gioco.java" Intrnl_Id="90">
+                                                            <LocList>
+                                                                <Loc EndOffset="4520" SrcFileId="1" StartOffset="4503"/>
+                                                            </LocList>
+                                                        </BasicStmnt>
+                                                        <BasicStmnt CovItemId="S30" CovItemPrefix="Gioco.java" Intrnl_Id="91">
+                                                            <LocList>
+                                                                <Loc EndOffset="4543" SrcFileId="1" StartOffset="4526"/>
+                                                            </LocList>
+                                                        </BasicStmnt>
+                                                    </StmntSeq>
+                                                </Branch>
+                                                <Branch CovItemId="B14" CovItemPrefix="Gioco.java" Implct="true" Intrnl_Id="92">
+                                                    <Cond/>
+                                                    <LocList/>
+                                                    <StmntSeq Intrnl_Id="93">
+                                                        <LocList/>
+                                                    </StmntSeq>
+                                                </Branch>
+                                                <Keyword EndOffset="4464" SrcFileId="1" StartOffset="4462"/>
+                                                <LocList>
+                                                    <Loc EndOffset="4549" SrcFileId="1" StartOffset="4462"/>
+                                                </LocList>
+                                                <RootTerm CovItemId="C11" CovItemPrefix="Gioco.java" Intrnl_Id="94">
+                                                    <OpTerm BooleanOpId="2" Intrnl_Id="95">
+                                                        <BasicBoolTerm Intrnl_Id="96">
+                                                            <LocList>
+                                                                <Loc EndOffset="4476" SrcFileId="1" StartOffset="4465"/>
+                                                            </LocList>
+                                                        </BasicBoolTerm>
+                                                        <BasicBoolTerm Intrnl_Id="97">
+                                                            <LocList>
+                                                                <Loc EndOffset="4494" SrcFileId="1" StartOffset="4480"/>
+                                                            </LocList>
+                                                        </BasicBoolTerm>
+                                                        <LocList>
+                                                            <Loc EndOffset="4479" SrcFileId="1" StartOffset="4477"/>
+                                                        </LocList>
+                                                    </OpTerm>
+                                                </RootTerm>
+                                            </CondStmnt>
+                                        </StmntSeq>
+                                    </Branch>
+                                    <Keyword EndOffset="4293" SrcFileId="1" StartOffset="4291"/>
+                                    <LocList>
+                                        <Loc EndOffset="4549" SrcFileId="1" StartOffset="4291"/>
+                                    </LocList>
+                                    <RootTerm CovItemId="C10" CovItemPrefix="Gioco.java" Intrnl_Id="98">
+                                        <OpTerm BooleanOpId="2" Intrnl_Id="99">
+                                            <BasicBoolTerm Intrnl_Id="100">
+                                                <LocList>
+                                                    <Loc EndOffset="4305" SrcFileId="1" StartOffset="4294"/>
+                                                </LocList>
+                                            </BasicBoolTerm>
+                                            <BasicBoolTerm Intrnl_Id="101">
+                                                <LocList>
+                                                    <Loc EndOffset="4321" SrcFileId="1" StartOffset="4309"/>
+                                                </LocList>
+                                            </BasicBoolTerm>
+                                            <LocList>
+                                                <Loc EndOffset="4308" SrcFileId="1" StartOffset="4306"/>
+                                            </LocList>
+                                        </OpTerm>
+                                    </RootTerm>
+                                </CondStmnt>
+                            </StmntSeq>
+                            <Keyword EndOffset="4171" SrcFileId="1" StartOffset="4168"/>
+                            <LocList>
+                                <Loc EndOffset="4554" SrcFileId="1" StartOffset="4168"/>
+                            </LocList>
+                            <RootTerm CovItemId="C9" CovItemPrefix="Gioco.java" Intrnl_Id="102">
+                                <BasicBoolTerm Intrnl_Id="103">
+                                    <LocList>
+                                        <Loc EndOffset="4198" SrcFileId="1" StartOffset="4183"/>
+                                    </LocList>
+                                </BasicBoolTerm>
+                            </RootTerm>
+                        </LoopStmnt>
+                    </StmntSeq>
+                </HierarchyLvl>
+                <HierarchyLvl HierarchyLvlId="2540" HierarchyLvlTypeId="3" Intrnl_Id="104" Name="print">
+                    <Header>
+                        <Loc EndOffset="4677" SrcFileId="1" StartOffset="4658"/>
+                    </Header>
+                    <LocList>
+                        <Loc EndOffset="5082" SrcFileId="1" StartOffset="4658"/>
+                    </LocList>
+                    <StmntSeq Intrnl_Id="105">
+                        <LocList>
+                            <Loc EndOffset="5049" SrcFileId="1" StartOffset="4683"/>
+                            <Loc EndOffset="5078" SrcFileId="1" StartOffset="5053"/>
+                        </LocList>
+                        <LoopStmnt CovItemId="S31" CovItemPrefix="Gioco.java" Intrnl_Id="106" MltplExecId="L5-2" MltplExecPrefix="Gioco.java" NvrExecId="L5-0" NvrExecPrefix="Gioco.java" OnceExecutedId="L5-1" OnceExecutedPrefix="Gioco.java" OptBodyExec="true">
+                            <StmntSeq Intrnl_Id="107">
+                                <LocList>
+                                    <Loc EndOffset="5044" SrcFileId="1" StartOffset="4726"/>
+                                </LocList>
+                                <CondStmnt CovItemId="S32" CovItemPrefix="Gioco.java" Intrnl_Id="108">
+                                    <Branch CovItemId="B15" CovItemPrefix="Gioco.java" Implct="false" Intrnl_Id="109">
+                                        <Cond/>
+                                        <LocList>
+                                            <Loc EndOffset="4830" SrcFileId="1" StartOffset="4753"/>
+                                        </LocList>
+                                        <StmntSeq Intrnl_Id="110">
+                                            <LocList>
+                                                <Loc EndOffset="4830" SrcFileId="1" StartOffset="4753"/>
+                                            </LocList>
+                                            <BasicStmnt CovItemId="S33" CovItemPrefix="Gioco.java" Intrnl_Id="111">
+                                                <LocList>
+                                                    <Loc EndOffset="4830" SrcFileId="1" StartOffset="4753"/>
+                                                </LocList>
+                                            </BasicStmnt>
+                                        </StmntSeq>
+                                    </Branch>
+                                    <Branch CovItemId="B16" CovItemPrefix="Gioco.java" Implct="false" Intrnl_Id="112">
+                                        <Cond>
+                                            <Loc EndOffset="4839" SrcFileId="1" StartOffset="4835"/>
+                                        </Cond>
+                                        <LocList>
+                                            <Loc EndOffset="5044" SrcFileId="1" StartOffset="4840"/>
+                                        </LocList>
+                                        <StmntSeq Intrnl_Id="113">
+                                            <LocList>
+                                                <Loc EndOffset="5044" SrcFileId="1" StartOffset="4840"/>
+                                            </LocList>
+                                            <CondStmnt CovItemId="S34" CovItemPrefix="Gioco.java" Intrnl_Id="114">
+                                                <Branch CovItemId="B17" CovItemPrefix="Gioco.java" Implct="false" Intrnl_Id="115">
+                                                    <Cond/>
+                                                    <LocList>
+                                                        <Loc EndOffset="4951" SrcFileId="1" StartOffset="4867"/>
+                                                    </LocList>
+                                                    <StmntSeq Intrnl_Id="116">
+                                                        <LocList>
+                                                            <Loc EndOffset="4951" SrcFileId="1" StartOffset="4867"/>
+                                                        </LocList>
+                                                        <BasicStmnt CovItemId="S35" CovItemPrefix="Gioco.java" Intrnl_Id="117">
+                                                            <LocList>
+                                                                <Loc EndOffset="4951" SrcFileId="1" StartOffset="4867"/>
+                                                            </LocList>
+                                                        </BasicStmnt>
+                                                    </StmntSeq>
+                                                </Branch>
+                                                <Branch CovItemId="B18" CovItemPrefix="Gioco.java" Implct="false" Intrnl_Id="118">
+                                                    <Cond>
+                                                        <Loc EndOffset="4960" SrcFileId="1" StartOffset="4956"/>
+                                                    </Cond>
+                                                    <LocList>
+                                                        <Loc EndOffset="5044" SrcFileId="1" StartOffset="4966"/>
+                                                    </LocList>
+                                                    <StmntSeq Intrnl_Id="119">
+                                                        <LocList>
+                                                            <Loc EndOffset="5044" SrcFileId="1" StartOffset="4966"/>
+                                                        </LocList>
+                                                        <BasicStmnt CovItemId="S36" CovItemPrefix="Gioco.java" Intrnl_Id="120">
+                                                            <LocList>
+                                                                <Loc EndOffset="5044" SrcFileId="1" StartOffset="4966"/>
+                                                            </LocList>
+                                                        </BasicStmnt>
+                                                    </StmntSeq>
+                                                </Branch>
+                                                <Keyword EndOffset="4842" SrcFileId="1" StartOffset="4840"/>
+                                                <LocList>
+                                                    <Loc EndOffset="5044" SrcFileId="1" StartOffset="4840"/>
+                                                </LocList>
+                                                <RootTerm CovItemId="C14" CovItemPrefix="Gioco.java" Intrnl_Id="121">
+                                                    <BasicBoolTerm Intrnl_Id="122">
+                                                        <LocList>
+                                                            <Loc EndOffset="4860" SrcFileId="1" StartOffset="4843"/>
+                                                        </LocList>
+                                                    </BasicBoolTerm>
+                                                </RootTerm>
+                                            </CondStmnt>
+                                        </StmntSeq>
+                                    </Branch>
+                                    <Keyword EndOffset="4728" SrcFileId="1" StartOffset="4726"/>
+                                    <LocList>
+                                        <Loc EndOffset="5044" SrcFileId="1" StartOffset="4726"/>
+                                    </LocList>
+                                    <RootTerm CovItemId="C13" CovItemPrefix="Gioco.java" Intrnl_Id="123">
+                                        <BasicBoolTerm Intrnl_Id="124">
+                                            <LocList>
+                                                <Loc EndOffset="4746" SrcFileId="1" StartOffset="4729"/>
+                                            </LocList>
+                                        </BasicBoolTerm>
+                                    </RootTerm>
+                                </CondStmnt>
+                            </StmntSeq>
+                            <Keyword EndOffset="4686" SrcFileId="1" StartOffset="4683"/>
+                            <LocList>
+                                <Loc EndOffset="5049" SrcFileId="1" StartOffset="4683"/>
+                            </LocList>
+                            <RootTerm CovItemId="C12" CovItemPrefix="Gioco.java" Intrnl_Id="125">
+                                <BasicBoolTerm Intrnl_Id="126">
+                                    <LocList>
+                                        <Loc EndOffset="4713" SrcFileId="1" StartOffset="4698"/>
+                                    </LocList>
+                                </BasicBoolTerm>
+                            </RootTerm>
+                        </LoopStmnt>
+                        <BasicStmnt CovItemId="S37" CovItemPrefix="Gioco.java" Intrnl_Id="127">
+                            <LocList>
+                                <Loc EndOffset="5078" SrcFileId="1" StartOffset="5053"/>
+                            </LocList>
+                        </BasicStmnt>
+                    </StmntSeq>
+                </HierarchyLvl>
+            </HierarchyLvl>
+        </HierarchyLvl>
+    </MASTRoot>
+</TestSessionContainer>

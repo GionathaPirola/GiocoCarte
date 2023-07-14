@@ -29,7 +29,10 @@ public class Gioco {
 			primoControllo();
 			secondoControllo();
 		}
-		return vittoria;
+		//return vittoria;
+		
+		//Errore volontario
+		return 1;
 	}
 	
 	

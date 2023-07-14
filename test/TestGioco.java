@@ -7,7 +7,7 @@ public class TestGioco {
 	@Test
 	public void testIstruzioni() {
 
-		//Test in cui qualcuno vince perchè gli altri hanno superato l'otto
+		//Test in cui qualcuno vince perche gli altri hanno superato l'otto
 		int result = 0;
 		Gioco g1 = new Gioco(3);
 		int[] pescata1 = {5,3,5};

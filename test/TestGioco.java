@@ -20,7 +20,7 @@ public class TestGioco {
 		assertEquals(2,result);
 		
 		
-		//Test in cui qualcuno vince perchè arriva ad otto preciso
+		//Test in cui qualcuno vince perche arriva ad otto preciso
 		Gioco g2 = new Gioco(3);
 		int[] pescata2 = {1,1,4};
 		
@@ -53,13 +53,13 @@ public class TestGioco {
 		result = g2.giocata(pescata2);
 		g2.print();
 		assertEquals(3,result);
-		//Chiamato due volte per controllare il caso in cui il gioco è terminato
+		//Chiamato due volte per controllare il caso in cui il gioco e terminato
 		result = g2.giocata(pescata2);
 		assertEquals(3,result);
 		
 		
 		/*	Test per coprire il caso in cui solo uno perde mentre gli altri possono giocare
-			Siamo quindi nel caso in cui un giocatore non può pescare mentre gli altri possono	*/
+			Siamo quindi nel caso in cui un giocatore non puo pescare mentre gli altri possono	*/
 		Gioco g3 = new Gioco(3);
 		int[] pescata3 = {1,1,5};
 		result = g3.giocata(pescata3);
@@ -69,7 +69,7 @@ public class TestGioco {
 	}
 	
 	
-	//Il test delle condizioni in questo caso è identico al test del branch, 
+	//Il test delle condizioni in questo caso e identico al test del branch, 
 	//tutte le condizioni all'interno dlel'if risultano vere e false
 	@Test
 	public void testCondizioni() {

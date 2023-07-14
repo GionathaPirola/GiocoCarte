@@ -46,7 +46,7 @@ public class Gioco {
 	//Richiedo che il vettore delle pescate abbia numeri positivi, compresi tra uno e sette
 		//@requires (\forall int x; 0<=x &&  x<pescate.length; pescate[x]>0 && pescate[x]<8);
 	
-	//Controllo che la mano più la pescate non superi il numero 20
+	//Controllo che la mano piu la pescate non superi il numero 20
 		//@requires (\forall int x; 0<=x &&  x<mano.length; (mano[x]+pescate[x])>=0 && (mano[x]+pescate[x])<=20);
 	
 	//Controllo che vittoria sia un numero compreso tra -1 (nessuno ha ancora vinto) e il numero dei giocatori
@@ -63,7 +63,7 @@ public class Gioco {
 			//@loop_invariant i>=0 && i<=mano.length;
 			//@loop_invariant (\forall int x; 0<=x && x<i; mano[x]>=0 && mano[x]<=20);
 			for(i = 0; i < mano.length; i++) {
-				//Se non si ha ancora perso ne vinto allora si può pescare
+				//Se non si ha ancora perso ne vinto allora si puo pescare
 				if(vincitori[i] == 0)
 					mano[i] = mano[i] + pescate[i];
 			}
@@ -83,12 +83,12 @@ public class Gioco {
 	public void primoControllo() {
 		this.controllo = 0;
 		int i = 0;
-		//Chi ha in mano più di otto ha perso
+		//Chi ha in mano piu di otto ha perso
 			//@loop_invariant (\forall int x; 0<=x && x<i; (mano[x]>8) ==> (vincitori[x]==-1));
 		//Chi ha in mano esattamente otto ha vinto
 			//@loop_invariant (\forall int x; 0<=x && x<i; (mano[x]==8) ==> (vincitori[x]==1));
 		for(i = 0; i < mano.length; i++) {
-			//Se in mano si ha più di otto si perde
+			//Se in mano si ha piu di otto si perde
 			if(mano[i] > 8)
 				vincitori[i] = - 1;
 			//Se in mano si ha esattamente otto, si vince
@@ -96,7 +96,7 @@ public class Gioco {
 				vincitori[i] = 1;
 				vittoria = i + 1;
 			}
-			//Se in mano si ha meno di otto, si può continuare a giocare a patto che nessuno abbia fatto esattamente otto (Controllato nel secondo metodo)
+			//Se in mano si ha meno di otto, si puo continuare a giocare a patto che nessuno abbia fatto esattamente otto (Controllato nel secondo metodo)
 			if(mano[i] < 8)
 				controllo = controllo + 1; 
 		}
@@ -107,10 +107,10 @@ public class Gioco {
 		//@ensures (\forall int x; 0<=x && x<mano.length; (vincitori[x]==-1) || (vincitori[x]==0) || (vincitori[x]==1));
 	public void secondoControllo() {
 		for(int i = 0; i < mano.length; i++) {
-			//Se in mano si ha meno di 8, però qualcuno ha già vinto allora si ha perso
+			//Se in mano si ha meno di 8, pero qualcuno ha gia vinto allora si ha perso
 			if(mano[i] < 8 && vittoria!=-1)
 				vincitori[i] = -1;
-			//Se in mano si ha mano di otto, però tutti gli altri hanno tutti superato l'otto, allora si ha vinto
+			//Se in mano si ha mano di otto, pero tutti gli altri hanno tutti superato l'otto, allora si ha vinto
 			else if(mano[i] < 8 && controllo == 1) {
 				vincitori[i] = 1;
 				vittoria = i + 1;

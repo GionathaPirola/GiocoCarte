@@ -74,7 +74,7 @@ public class Gioco {
 			else if(vincitori[i] == 0)
 				System.out.println("Giocatore " + i + " ha in mano: " + mano[i] + "-> PUO GIOCARE");
 			else
-				System.out.println("Giocatore " + i + " ha in mano: " + mano[i] + "-> LOSE!");
+				System.out.println("Giocatore lol " + i + " ha in mano: " + mano[i] + "-> LOSE!");
 		}
 		System.out.println("\n");
 	}
